@@ -16,6 +16,17 @@ public class CopyAndWriteArrayList {
     private volatile int size = DEFAULT_CAPACITY;
     private AtomicInteger cursor = new AtomicInteger();
 
+    public CopyAndWriteArrayList() {
+    }
+
+    /**
+     *
+     * @param size count element оf array
+     */
+    public CopyAndWriteArrayList(int size) {
+        this.size = size;
+        innerArray = new int[size];
+    }
 
     /**
      * Add new element in Array
@@ -69,9 +80,14 @@ public class CopyAndWriteArrayList {
         if (newArray.length == 0){
             return true;
         }
-        int[] tempArray =  new int[newArray.length-1];
-        System.arraycopy(newArray,0,tempArray,0,newArray.length-1);
-        return innerArray.equals(tempArray);
+        CopyAndWriteArrayList tempArray =  new CopyAndWriteArrayList(cursor.get());
+        CopyAndWriteArrayList tempInnerArray =  new CopyAndWriteArrayList(cursor.get());
+        for (int i = 0; i < cursor.get(); i++) {
+            tempArray.add(newArray[i]);
+            tempInnerArray.add(innerArray[i]);
+        }
+
+        return tempArray.equals(tempInnerArray);
     }
 
 
