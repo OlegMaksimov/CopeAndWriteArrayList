@@ -20,7 +20,7 @@ class CopyOnWriteArrayListTest {
     void get(){
         CopyOnWriteArrayList list = new CopyOnWriteArrayList();
         Assertions.assertTrue(list.add(2));
-        Assertions.assertEquals(2,list.get(10));
+        Assertions.assertEquals(2,list.get(1));
     }
 
     @Test
@@ -30,7 +30,7 @@ class CopyOnWriteArrayListTest {
         for (int i = 0; i < size; i++) {
             list.add(i);
         }
-        Assertions.assertEquals(size, list.size());
+        Assertions.assertEquals(size+1, list.size());
     }
 
     @Test
@@ -49,14 +49,15 @@ class CopyOnWriteArrayListTest {
     void racingThread() throws InterruptedException {
         CopyOnWriteArrayList list = new CopyOnWriteArrayList();
         ExecutorService service = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 100; i++) {
+        int size = 100;
+        for (int i = 0; i < size; i++) {
             final Random random = new Random();
             service.submit(()->{
                 list.add(random.nextInt());
             });
         }
         service.awaitTermination(10, TimeUnit.SECONDS);
-        Assertions.assertEquals(110, list.size());
+        Assertions.assertEquals(size+1, list.size());
         System.out.println(list.toString());
     }
 
@@ -70,7 +71,7 @@ class CopyOnWriteArrayListTest {
 
     @Test
     void addNewEllementInCurrentIndex(){
-        CopyOnWriteArrayList list = new CopyOnWriteArrayList();
+        CopyOnWriteArrayList list = new CopyOnWriteArrayList(5);
         list.add(1,5);
         Assertions.assertEquals(5,list.get(1));
     }

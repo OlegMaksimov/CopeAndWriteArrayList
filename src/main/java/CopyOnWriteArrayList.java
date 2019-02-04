@@ -13,7 +13,7 @@ public class CopyOnWriteArrayList extends AbstractList<Integer> {
     private final Logger log = Logger.getLogger(this.getClass());
 
     private final ReentrantLock lock = new ReentrantLock();
-    private int DEFAULT_CAPACITY = 10;
+    private int DEFAULT_CAPACITY = 1;
     private volatile int[] innerArray = new int[DEFAULT_CAPACITY];
     private volatile AtomicInteger cursor = new AtomicInteger();
 
