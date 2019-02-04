@@ -33,10 +33,10 @@ public class CopyAndWriteArrayList {
      * @return Boolean
      */
     public  boolean add (Integer e){
+        lock.lock();
         int[] tempArray = innerArray.clone();
         if (cursor.get() == 0 && size >0){
             tempArray[cursor.get()] = e;
-            lock.lock();
             innerArray = tempArray.clone();
             cursor.incrementAndGet();
             lock.unlock();
@@ -44,9 +44,9 @@ public class CopyAndWriteArrayList {
         }
         if (cursor.get() < size) {
             tempArray[cursor.get()] = e;
-            lock.lock();
+//            lock.lock();
             if (checkArrays(tempArray)) {
-                innerArray = tempArray.clone();
+                innerArray =tempArray.clone();
                 cursor.incrementAndGet();
             } else {
                 cursor.decrementAndGet();
@@ -54,7 +54,7 @@ public class CopyAndWriteArrayList {
             lock.unlock();
             return true;
         } else {
-            lock.lock();
+//            lock.lock();
             size = size * 2;
             innerArray = Arrays.copyOf(innerArray,size);
             tempArray = innerArray.clone();
@@ -69,6 +69,14 @@ public class CopyAndWriteArrayList {
             lock.unlock();
             return true;
         }
+    }
+
+    private int[] copyArray (int[] array, int length){
+        int[] result = new int[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = array[i];
+        }
+        return result;
     }
 
     /**
@@ -86,7 +94,6 @@ public class CopyAndWriteArrayList {
             tempArray.add(newArray[i]);
             tempInnerArray.add(innerArray[i]);
         }
-
         return tempArray.equals(tempInnerArray);
     }
 
@@ -110,5 +117,14 @@ public class CopyAndWriteArrayList {
     @Override
     public int hashCode() {
         return Arrays.hashCode(innerArray);
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < cursor.get(); i++) {
+            buffer.append(innerArray[i]+",");
+        }
+        return buffer.toString();
     }
 }
