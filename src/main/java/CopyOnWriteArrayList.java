@@ -58,6 +58,18 @@ public class CopyOnWriteArrayList extends AbstractList<Integer> {
         if (index > innerArray.length || index < 0) {
             throw new IndexOutOfBoundsException("This index is not valid.");
         }
+        Lock lock = this.lock;
+        lock.lock();
+        try{
+            int length = innerArray.length;
+            int[] copy = new int[length + 1];
+            System.arraycopy(innerArray, 0, copy, 0, index-1);
+            copy[index] = element;
+            System.arraycopy(innerArray, index+1, copy, index, index-1);
+            innerArray = copy;
+        } finally {
+            lock.unlock();
+        }
 
     }
 

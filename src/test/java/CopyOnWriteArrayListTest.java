@@ -20,7 +20,7 @@ class CopyOnWriteArrayListTest {
     void get(){
         CopyOnWriteArrayList list = new CopyOnWriteArrayList();
         Assertions.assertTrue(list.add(2));
-        Assertions.assertEquals(2,list.get(0));
+        Assertions.assertEquals(2,list.get(10));
     }
 
     @Test
@@ -69,6 +69,10 @@ class CopyOnWriteArrayListTest {
 
 
     @Test
-    void addNewEllementInCurrentIndex(){}
+    void addNewEllementInCurrentIndex(){
+        CopyOnWriteArrayList list = new CopyOnWriteArrayList();
+        list.add(1,5);
+        Assertions.assertEquals(5,list.get(1));
+    }
 
 }
